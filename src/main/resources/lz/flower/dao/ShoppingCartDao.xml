@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lz.flower.dao.ShoppingCartDao">
+
+    <select id="getPage" resultType="flower" parameterType="String">
+        select
+            ft.flowerId as "flowerId",ft.flowerName as "flowerName",ft.picture as "picture",
+            ft.price as "price",ft.discount as "discount",ft.stock as "stock",
+            sc.quantity as "sell",sc.cartId as "shoppingCartId"
+        from flower_table ft
+	        LEFT JOIN shoppingCart sc ON sc.flowerId =ft.flowerId
+        where sc.userId = #{userId}
+    </select>
+</mapper>

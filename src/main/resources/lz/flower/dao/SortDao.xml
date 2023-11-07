@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lz.flower.dao.SortDao">
+
+    <select id="getAll" resultType="Sort" parameterType="Sort">
+        select fs.sortId as "sortId",fs.purpose as "purpose",fs.material as "material",fs.color as "color",
+        fs.flowerId as flowerId,ft.flowerName as "flowerName"
+        from flower_sort fs
+        LEFT JOIN flower_table ft ON ft.flowerId = fs.flowerId
+        <where>
+            <if test="sort.flowerName != '' and sort.flowerName != null">
+                and ft.flowerName like concat(concat("%",#{sort.flowerName}),"%")
+            </if>
+            <if test="sort.purpose != '' and sort.purpose != null">
+                and purpose like concat(concat("%",#{sort.purpose}),"%")
+            </if>
+            <if test="sort.material != '' and sort.material != null">
+                and material like concat(concat("%",#{sort.material}),"%")
+            </if>
+            <if test="sort.color != '' and sort.color != null">
+                and color like concat(concat("%",#{sort.color}),"%")
+            </if>
+        </where>
+    </select>
+
+    <!--所有没被分类的鲜花ID-->
+    <select id="notSortFlowerId" resultType="String">
+        select flowerId from flower_table where flowerId not in(select flowerId from flower_sort)
+    </select>
+
+    <!--    根据id数组查询-->
+    <select id="canSortFlowerName" resultType="string" parameterType="list">
+        select flowerName from flower_table
+        <where>
+            <foreach collection="array" item="id" open="flowerId in(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lz.flower.dao.EvaluateDao">
+
+    <select id="getAll" resultType="evaluate" parameterType="Evaluate">
+        select e.evaluateId as "evaluateId",e.info as "info",e.flowerId as "flowerId",e.userId as "userId",
+        e.score as "score",e.orderNum as "orderNum",e.evaluateTime as "evaluateTime",
+        f.flowerName as "flowerName",u.userName as "userName"
+        from evaluate e
+        LEFT JOIN flower_table f ON e.flowerId = f.flowerId
+        LEFT JOIN user_table u ON e.userId = u.userId
+        <where>
+            <if test="evaluate.flowerName != '' and evaluate.flowerName != null">
+                and e.flowerId in
+                (select flowerId from flower_table where flower_table.flowerName like
+                concat(concat("%",#{evaluate.flowerName}),"%"))
+            </if>
+            <if test="evaluate.userName != '' and evaluate.userName != null">
+                and e.userId in
+                (select userId from user_table where user_table.userName like
+                concat(concat("%",#{evaluate.userName}),"%"))
+            </if>
+        </where>
+    </select>
+</mapper>

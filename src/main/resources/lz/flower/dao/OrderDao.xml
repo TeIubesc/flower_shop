@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lz.flower.dao.OrderDao">
+
+    <!--    获取订单详情-->
+    <select id="getOrderDetail" resultType="OrderDetail" parameterType="String">
+        SELECT ft.flowerId as "flowerId",ft.flowerName as "flowerName",ft.picture as "picture",
+			od.quantity as "quantity",od.orderNum as "orderNum",od.unitPrice as "unitPrice",
+            ot.userId as "userId"
+            FROM `order_table` ot
+                LEFT JOIN order_detail od ON ot.orderNum = od.orderNum
+                LEFT JOIN flower_table ft ON ft.flowerId = od.flowerId
+        where ot.orderId = #{orderId}
+    </select>
+
+    <!--    发货操作-->
+    <update id="deliverGoods" parameterType="Order">
+        update order_table set state = #{state},deliverTime = #{deliverTime} where orderId = #{orderId}
+    </update>
+
+
+</mapper>

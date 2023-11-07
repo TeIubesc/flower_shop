@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lz.flower.dao.FlowerDao">
+
+    <!--    按用途分类获取鲜花id-->
+    <select id="getSortIds" resultType="int" parameterType="string">
+        select flowerId from flower_sort
+        <where>
+            <if test="sortName != '' and sortType != ''">
+                and ${sortType} like concat(concat("%",#{sortName}),"%")
+            </if>
+        </where>
+    </select>
+</mapper>

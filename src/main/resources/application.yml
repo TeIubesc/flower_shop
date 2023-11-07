@@ -1,0 +1,68 @@
+server:
+  port: 8866
+  servlet:
+    context-path: /flower_shop
+
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/flower_shop_db2?characterEncoding=utf8
+      username: root
+      password: root
+  servlet: # 文件上传
+    multipart:
+      enabled: true # 开启文件上传
+      file-size-threshold: 0  # 文件写入磁盘的阈值，默认为0
+      max-file-size: 2MB  #限制单个文件上传的大小，默认为1MB
+      max-request-size: 10MB  #多个文件上传的大小，默认为10MB
+      resolve-lazily: false #表示文件是否延迟解析，默认为false
+  mail:
+    # smtp:发送邮件 qq:QQ邮箱
+    host: smtp.qq.com
+    # 发送者账号
+    username: 1206471253@qq.com
+    # 授权码
+    password: xxxxxxxxxxx   # 请输入自己的授权码
+    # 开启加密验证
+#    properties.mail.smtp.ssl.enable: true
+
+mybatis-plus:
+  configuration:
+    #    显示日志
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #    数据库表字段没使用下划线命名
+    map-underscore-to-camel-case: false
+  global-config:
+    db-config:
+      # id自增
+      id-type: auto
+  type-aliases-package: lz.flower.entity  # 定义别名
+#  下面这个，映射文件与dao包对应时不用写
+#  mapper-locations: classpath:lz/flower/dao/*.xml
+
+jetcache:
+  #  statIntervalMinutes: 30  #查看缓存统计报表(分钟)
+  local: #本地方案
+    default:
+      type: linkedhasmap
+      #键类型转换器，如果键为对象则转为json字符串
+      keyConvertor: fastjson
+  remote: #远程方案 使用redis
+    default:  #area不指定时默认用这个
+      type: redis
+      # 缓存存储CURD数据时加下三行
+      keyConvertor: fastjson
+      valueEncode: java
+      valueDecode: java
+      host: localhost
+      port: 6379
+      poolconfig:
+        maxTotal: 50  # 最大连接数
+
+page: #自定义属性
+  flowerImg: E:\Download\temp2\  # 鲜花图片存放路径
+  txImg: E:\Download\temp2\tx\   # 用户头像存放路径
+  pageImg: E:\Download\temp2\pageImg\    # 前台展示页面静态图片存放路径
+  verifyImg: E:\Download\temp2\pageImg\verify\    # 验证码滑块图片存放路径
+  noticeImg: E:\Download\temp2\pageImg\notice\    # 公告图片存放路径
